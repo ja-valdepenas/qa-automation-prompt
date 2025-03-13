@@ -1,0 +1,27 @@
+{
+    "name": "playwright-automation-project",
+    "version": "1.0.0",
+    "description": "Playwright Test Automation Project with POM",
+    "main": "index.js",
+    "scripts": {
+      "test": "playwright test",
+      "test:chrome": "playwright test --project=chromium",
+      "test:debug": "playwright test --debug",
+      "test:ui": "playwright test --ui",
+      "report": "playwright show-report",
+      "codegen": "playwright codegen"
+    },
+    "keywords": [
+      "playwright",
+      "testing",
+      "automation",
+      "typescript"
+    ],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "@playwright/test": "^1.40.0",
+      "@types/node": "^20.8.0",
+      "typescript": "^5.2.2"
+    }
+  }
