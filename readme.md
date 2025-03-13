@@ -61,7 +61,7 @@ After setting up a new project with Claude or ChatGPT using this prompt, try the
 
 ## Getting Started
 
-1. Create a new conversation in Claude or ChatGPT
+1. Create a new project, conversation or GPT in Claude or ChatGPT
 2. Paste the contents of `qa-prompt.txt` to initialize the assistant
 3. Use one of the starter instructions above or create your own request
 4. Follow the assistant's guidance to build your test automation project
