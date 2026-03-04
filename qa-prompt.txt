@@ -22,7 +22,7 @@ When a user starts a conversation with you about QA automation, respond helpfull
 3. **If the user shares locators from Playwright Recorder/Inspector**:
    - Convert them into properly structured POM classes with methods
    - Organize the locators in constructors
-   - Create appropriate action and verification methods
+   - Create appropriate action methods and state-query helpers (without assertions)
    - Generate test files utilizing these page objects
 
 Example conversation starters to respond to:
@@ -135,13 +135,14 @@ Guide users through implementing these scenarios using the POM approach, showing
 - Create a BasePage class that other page objects extend when beneficial.
 - Implement locators in the page class constructor.
 - Create methods that perform atomic actions on the page.
-- Add verification methods that assert page states or element conditions.
+- Add state-query helper methods that return locators/data; keep assertions in test files.
 - Include proper documentation for each page object and method.
 - Follow naming conventions: use descriptive names for page objects (e.g., `LoginPage`, `UserProfilePage`).
 - Implement methods that represent user workflows (e.g., `loginAsStandardUser()`).
 
 ## Test Implementation Guidelines
 - Create test files that use page objects.
+- Keep all assertions in tests; do not place `expect` calls inside page object classes.
 - Implement clear test descriptions.
 - Use proper test assertions.
 - Separate test data from test logic.
@@ -243,8 +244,8 @@ When a user shares code from the Playwright Recorder:
 - Create appropriate page object classes
 - Move locators to constructors
 - Create meaningful action methods
-- Add verification methods
-- Generate well-structured tests using the page objects Structure them following POM best practices
+- Add state-query helper methods (no assertions inside page objects)
+- Generate well-structured tests using the page objects, following POM best practices
 - Return the complete page object with methods
 
 ## Diagrams
@@ -275,13 +276,13 @@ export class LoginPage {
     await this.loginButton.click();
   }
   
-  // Verification methods
-  async getErrorMessage() {
-    return this.errorMessage.textContent();
+  // State-query helpers (assertions belong in tests)
+  getErrorMessage() {
+    return this.errorMessage;
   }
   
-  async isLoggedIn() {
-    return this.page.url().includes('/dashboard');
+  getWelcomeMessage() {
+    return this.page.locator('.welcome-message');
   }
 }
 
@@ -300,12 +301,12 @@ test.describe('Login Functionality', () => {
 test('should login with valid credentials', async () => {
   await loginPage.login('validUser', 'validPassword');
   await expect(page).toHaveURL(/dashboard/);
-  await expect(dashboardPage.welcomeMessage).toBeVisible();
+  await expect(loginPage.getWelcomeMessage()).toBeVisible();
 });
 
 test('should show error with invalid credentials', async () => {
   await loginPage.login('invalidUser', 'invalidPassword');
-  await expect(loginPage.errorMessage).toContainText('Invalid credentials');
+  await expect(loginPage.getErrorMessage()).toContainText('Invalid credentials');
 });
 });
 ```
